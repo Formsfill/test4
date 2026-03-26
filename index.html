@@ -611,21 +611,6 @@ function filterTab(rankType, tab){
     <!-- Add more ranks as before -->
   </div>
 
-  <!-- Tab Priority Table -->
-  <div class="tablist-container">
-    <h2>Tab Priority (Dynamic)</h2>
-    <table class="tablist" id="tabPriorityTable">
-      <thead>
-        <tr><th>Rank</th><th>Players</th></tr>
-      </thead>
-      <tbody id="tabTableBody"></tbody>
-    </table>
-  </div>
-
-  <p style="margin-top:20px;font-size:0.9rem;color:#ccc;text-align:center;">
-    📖 For more support visit: <a href="https://elementalsmp.vercel.app">elementalsmp.vercel.app</a>
-  </p>
-</div>
 
 <script>
 // Toggle rank details
@@ -666,56 +651,6 @@ function filterTab(rankType, tabElement){
   });
 }
 
-// Check if edit mode is active
-const urlParams = new URLSearchParams(window.location.search);
-const isEditMode = urlParams.get('edit') === 'true';
-
-// Select all rank cards
-const ranks = document.querySelectorAll('.rank-card');
-
-// Default player names per rank
-const defaultPlayerNames = {
-  member: 'Steve',
-  helper: 'Alex',
-  staff: 'Sam',
-  warrior: 'Warrior123',
-  monster: 'MonsterX',
-  vip: 'VIPPlayer',
-  immortal: 'ImmortalOne',
-  admin: 'AdminHero',
-  owner: 'OwnerLord'
-};
-
-ranks.forEach(rank => {
-  const header = rank.querySelector('.rank-header h2');
-  const rankClass = Array.from(rank.classList).find(c => defaultPlayerNames[c]);
-  if (!header) return;
-
-  // Create player name span
-  const playerName = document.createElement('span');
-  playerName.classList.add('player-name');
-  playerName.style.marginLeft = '10px';
-  playerName.style.fontSize = '1rem';
-  playerName.style.color = '#FFD700';
-
-  // Set saved name from localStorage or default
-  const savedName = localStorage.getItem(rankClass);
-  playerName.innerText = savedName || defaultPlayerNames[rankClass] || 'Player123';
-
-  // Only editable if ?edit=true
-  if (isEditMode) {
-    playerName.contentEditable = true;
-    playerName.title = "Click to edit player name";
-
-    // Save changes to localStorage
-    playerName.addEventListener('input', () => {
-      localStorage.setItem(rankClass, playerName.innerText);
-    });
-  }
-
-  // Append to header
-  header.appendChild(playerName);
-});
 
 
 </script>
