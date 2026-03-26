@@ -693,48 +693,7 @@ function populateTabTable(){
   });
 }
 
-// Select all rank cards
-const ranks = document.querySelectorAll('.rank-card');
 
-// Default player names (can customize per rank)
-const defaultPlayerNames = {
-  member: 'Steve',
-  helper: 'Alex',
-  staff: 'Sam',
-  warrior: 'Warrior123',
-  monster: 'MonsterX',
-  vip: 'VIPPlayer',
-  immortal: 'ImmortalOne',
-  admin: 'AdminHero',
-  owner: 'OwnerLord'
-};
-
-ranks.forEach(rank => {
-  const header = rank.querySelector('.rank-header h2');
-  const rankClass = Array.from(rank.classList).find(c => defaultPlayerNames[c]);
-  if (!header) return;
-
-  // Create player name span
-  let playerName = document.createElement('span');
-  playerName.classList.add('player-name');
-  playerName.style.marginLeft = '10px';
-  playerName.style.fontSize = '1rem';
-  playerName.style.color = '#FFD700';
-  playerName.contentEditable = true; // makes it editable
-  playerName.title = "Click to edit player name";
-
-  // Set saved name from localStorage or default
-  const savedName = localStorage.getItem(rankClass);
-  playerName.innerText = savedName || defaultPlayerNames[rankClass] || 'Player123';
-
-  // Append to header
-  header.appendChild(playerName);
-
-  // Save edited name
-  playerName.addEventListener('input', () => {
-    localStorage.setItem(rankClass, playerName.innerText);
-  });
-});
 </script>
 
 </body>
