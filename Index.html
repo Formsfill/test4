@@ -720,7 +720,29 @@ if (isEdit) {
     });
   });
 }
+const urlParams = new URLSearchParams(window.location.search);
+const isEdit = urlParams.get('edit') === 'true';
 
+if (isEdit) {
+  document.querySelectorAll('.rank-card').forEach(card => {
+    // Check if player name span already exists
+    if (!card.querySelector('.player-name')) {
+      const nameEl = document.createElement('p');
+      nameEl.className = 'player-name';
+      nameEl.textContent = 'Player'; // default name
+      nameEl.contentEditable = true;
+      nameEl.style.borderBottom = "1px dashed #fff";
+      nameEl.style.marginTop = "10px";
+      nameEl.style.fontWeight = "500";
+      nameEl.title = "Click to edit player name";
+      
+      // Insert at the top of rank-details or after rank-header
+      const header = card.querySelector('.rank-header');
+      header.insertAdjacentElement('afterend', nameEl);
+    }
+  });
+  console.log("Player edit mode is ON");
+}
 </script>
 
 </body>
