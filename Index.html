@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elemental SMP Ranks</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+body {background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:white;min-height:100vh;padding:30px 20px;}
+.container {max-width:1100px;margin:auto;}
+.title {text-align:center;font-size:3rem;margin-bottom:20px;font-weight:700;letter-spacing:1px;color:#ffcc00;text-shadow: 1px 1px 5px rgba(0,0,0,0.5);}
+.controls {display:flex;justify-content:center;gap:20px;margin-bottom:20px;flex-wrap:wrap;}
+input[type="text"] {padding:10px 15px;border-radius:8px;border:none;font-size:1rem;}
+select {padding:10px 15px;border-radius:8px;border:none;font-size:1rem;}
+.tabs {display:flex;justify-content:center;gap:15px;margin-bottom:25px;flex-wrap:wrap;}
+.tab {padding:10px 20px;border-radius:10px;background:rgba(255,255,255,0.1);cursor:pointer;transition:0.3s;}
+.tab.active {background:#ffcc00;color:#000;font-weight:700;}
+.rank-card {background: rgba(255,255,255,0.05);border-radius:15px;padding:20px 25px;margin-bottom:20px;backdrop-filter: blur(15px);border:1px solid rgba(255,255,255,0.15);cursor:pointer;transition: transform 0.3s, box-shadow 0.3s;}
+.rank-card:hover {transform: translateY(-7px);box-shadow:0 15px 30px rgba(0,0,0,0.5);}
+.rank-header {display:flex;justify-content:space-between;align-items:center;}
+.rank-header h2 {font-size:1.8rem;}
+.rank-header span {font-size:0.95rem;color:#ccc;}
+.rank-details {margin-top:15px;display:none;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);}
+.rank-details p {margin-bottom:8px;line-height:1.5;font-size:1rem;}
+.rank-details p span {margin-right:6px;}
+.owner h2{color:#ff4d4d;} admin h2{color:#ff944d;} immortal h2{color:#ffcc00;} vip h2{color:#00e6e6;} monster h2{color:#ff66ff;} warrior h2{color:#66ff66;} staff h2{color:#3399ff;} helper h2{color:#cccccc;} member h2{color:#888;}
+@media(max-width:768px){.rank-header h2{font-size:1.5rem;}.rank-details p{font-size:0.9rem;}}
+a{text-decoration:none;color:#ffcc00;}
+  * {margin:0;padding:0;box-sizing:border-box;font-family:'Roboto',sans-serif;}
+body {background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);color:white;min-height:100vh;padding:30px 20px;}
+.container {max-width:1100px;margin:auto;}
+.title {text-align:center;font-size:3rem;margin-bottom:20px;font-weight:700;letter-spacing:1px;color:#ffcc00;text-shadow: 1px 1px 5px rgba(0,0,0,0.5);}
+.controls {display:flex;justify-content:center;gap:20px;margin-bottom:20px;flex-wrap:wrap;}
+input[type="text"] {padding:10px 15px;border-radius:8px;border:none;font-size:1rem;}
+select {padding:10px 15px;border-radius:8px;border:none;font-size:1rem;}
+.tabs {display:flex;justify-content:center;gap:15px;margin-bottom:25px;flex-wrap:wrap;}
+.tab {padding:10px 20px;border-radius:10px;background:rgba(255,255,255,0.1);cursor:pointer;transition:0.3s;}
+.tab.active {background:#ffcc00;color:#000;font-weight:700;}
+.rank-card {background: rgba(255,255,255,0.05);border-radius:15px;padding:20px 25px;margin-bottom:20px;backdrop-filter: blur(15px);border:1px solid rgba(255,255,255,0.15);cursor:pointer;transition: transform 0.3s, box-shadow 0.3s;}
+.rank-card:hover {transform: translateY(-7px);box-shadow:0 15px 30px rgba(0,0,0,0.5);}
+.rank-header {display:flex;justify-content:space-between;align-items:center;}
+.rank-header h2 {font-size:1.8rem;}
+.rank-header span {font-size:0.95rem;color:#ccc;}
+.rank-details {margin-top:15px;display:none;padding-top:12px;border-top:1px solid rgba(255,255,255,0.2);}
+.rank-details p {margin-bottom:8px;line-height:1.5;font-size:1rem;}
+.rank-details p span {margin-right:6px;}
+.owner h2{color:#ff4d4d;} admin h2{color:#ff944d;} immortal h2{color:#ffcc00;} vip h2{color:#00e6e6;} monster h2{color:#ff66ff;} warrior h2{color:#66ff66;} staff h2{color:#3399ff;} helper h2{color:#cccccc;} member h2{color:#888;}
+@media(max-width:768px){.rank-header h2{font-size:1.5rem;}.rank-details p{font-size:0.9rem;}}
+a{text-decoration:none;color:#ffcc00;}
+.tablist-container {margin-top:40px;background:rgba(255,255,255,0.05);padding:20px;border-radius:15px;backdrop-filter:blur(15px);}
+.tablist-container h2 {text-align:center;margin-bottom:15px;color:#ffcc00;text-shadow: 1px 1px 3px rgba(0,0,0,0.5);}
+.tablist {width:100%;border-collapse:collapse;}
+.tablist th, .tablist td {padding:12px 10px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.2);}
+.tablist th {color:#ffcc00;}
+.tablist tr:nth-child(even){background:rgba(255,255,255,0.05);}
+.tablist tr:hover{background:rgba(255,204,0,0.2);cursor:pointer;}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="title">Elemental SMP Ranks</div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="filterTab('all', this)">All</div>
+    <div class="tab" onclick="filterTab('member', this)">Member</div>
+    <div class="tab" onclick="filterTab('helper', this)">Helper</div>
+    <div class="tab" onclick="filterTab('staff', this)">Staff</div>
+    <div class="tab" onclick="filterTab('warrior', this)">Warrior</div>
+    <div class="tab" onclick="filterTab('monster', this)">Monster</div>
+    <div class="tab" onclick="filterTab('vip', this)">VIP</div>
+    <div class="tab" onclick="filterTab('immortal', this)">Immortal</div>
+    <div class="tab" onclick="filterTab('admin', this)">Admin</div>
+    <div class="tab" onclick="filterTab('owner', this)">Owner</div>
+  </div>
+
+  <!-- Search + Price Filter -->
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search rank..." onkeyup="searchRanks()">
+    <select id="filterSelect" onchange="filterRanks()">
+      <option value="default">Sort by price</option>
+      <option value="low-high">Lowest → Highest</option>
+      <option value="high-low">Highest → Lowest</option>
+    </select>
+  </div>
+
+  <div id="ranksContainer">
+
+  <div class="rank-card member" data-rs="0" onclick="toggleDetails(this)">
+  <div class="rank-header"><h2>MEMBER</h2><span>Default</span></div>
+  <div class="rank-details">
+    <p>
+      <span>
+        <!-- Player icon -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="7" r="4"/>
+          <path d="M6 21v-2a6 6 0 0 1 12 0v2"/>
+        </svg>
+      </span>
+      Basic player permissions
+    </p>
+    <p>
+      <span>
+        <!-- Compass / Explore -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="12 8 15 12 12 16 9 12 12 8"/>
+        </svg>
+      </span>
+      Can explore and play freely
+    </p>
+    <p>
+     <span>
+  <!-- Gear / Server Features -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+  </svg>
+</span>
+      Access general server features
+    </p>
+    <p>
+      <span>
+        <!-- Chat / Interaction -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+        </svg>
+      </span>
+      Interact with other players
+    </p>
+  </div>
+</div>
+
+    <div class="rank-card helper" data-rs="0" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>HELPER</h2><span>Support Role</span></div>
+      <div class="rank-details">
+        <!-- Helper rank card details -->
+<p><span>
+  <!-- 👂 Assist members with questions -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00CCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 4v16h16V4H4z"/>
+    <path d="M12 12h.01"/>
+  </svg>
+</span>Assist members with questions</p>
+
+<p><span>
+  <!-- 🛡 Moderate chat and maintain order -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00CCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Moderate chat and maintain order</p>
+
+<p><span>
+  <!-- 🌐 Support the community actively -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00CCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/>
+  </svg>
+</span>Support the community actively</p>
+
+<p><span>
+  <!-- 🧭 Guide new players -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00CCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15 22 12 17 9 22 12 2"/>
+  </svg>
+</span>Guide new players</p>
+
+<p><span>
+  <!-- ⚠ Report issues to staff -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00CCFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12" y2="17"/>
+  </svg>
+</span>Report issues to staff</p>
+      </div>
+    </div>
+
+    <div class="rank-card staff" data-rs="0" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>STAFF</h2><span>Server Helper</span></div>
+      <div class="rank-details">
+        <!-- Staff rank card details -->
+<p><span>
+  <!-- 🛡️ Oversee server moderation -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Oversee server moderation</p>
+
+<p><span>
+  <!-- 👥 Assist members -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+    <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+    <circle cx="12" cy="7" r="4"/>
+  </svg>
+</span>Assist members</p>
+
+<p><span>
+  <!-- ⚙️ Manage server settings -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l0 0a2 2 0 0 1-2.83 2.83l0 0a1.65 1.65 0 0 0-1.82-.33"/>
+    <path d="M4.6 9a1.65 1.65 0 0 0-.33-1.82l0 0a2 2 0 0 1 2.83-2.83l0 0a1.65 1.65 0 0 0 1.82.33"/>
+  </svg>
+</span>Manage server settings</p>
+
+<p><span>
+  <!-- 📋 Monitor player activity -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </svg>
+</span>Monitor player activity</p>
+
+<p><span>
+  <!-- 📝 Report issues and logs -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3399FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </svg>
+</span>Report issues and logs</p>
+      </div>
+    </div>
+
+    <div class="rank-card warrior" data-rs="30" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>WARRIOR</h2><span>30 RS</span></div>
+      <div class="rank-details">
+        <!-- Warrior rank card details -->
+<p><span>
+  <!-- 💎 Armor & Tools -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#66FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Enchanted Diamond Armor & Tools</p>
+
+<p><span>
+  <!-- 🍎 Consumables -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#66FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8"/>
+    <line x1="12" y1="8" x2="12" y2="16"/>
+    <line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+</span>Golden Apples</p>
+
+<p><span>
+  <!-- 🏠 Homes -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#66FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12l9-9 9 9"/>
+    <path d="M9 21V12h6v9"/>
+  </svg>
+</span>Homes: 3 | PVs: 3</p>
+
+<p><span>
+  <!-- ⚒️ Commands -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#66FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2l4 4-8 8-4-4z"/>
+    <path d="M14 2l4 4L10 14l-4-4z"/>
+  </svg>
+</span>Commands: /e-chest</p>
+
+<p><span>
+  <!-- 🛒 Auction & 📦 Kit -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#66FF66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6h15l-1.5 9h-13z"/>
+    <circle cx="9" cy="21" r="1"/>
+    <circle cx="18" cy="21" r="1"/>
+  </svg>
+</span>Auction: 3 items at a time & Weekly Kit</p>
+      </div>
+    </div>
+
+    <div class="rank-card monster" data-rs="60" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>MONSTER</h2><span>60 RS</span></div>
+      <div class="rank-details">
+        <!-- Monster rank card details -->
+<p><span>
+  <!-- 💎 Armor & Tools -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Max Enchanted Diamond Armor & Tools</p>
+
+<p><span>
+  <!-- 🍎 Consumables -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8"/>
+    <line x1="12" y1="8" x2="12" y2="16"/>
+    <line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+</span>Golden Apples</p>
+
+<p><span>
+  <!-- 🏠 Homes -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12l9-9 9 9"/>
+    <path d="M9 21V12h6v9"/>
+  </svg>
+</span>Homes: 4 | PVs: 4</p>
+
+<p><span>
+  <!-- ⚒️ Commands -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2l4 4-8 8-4-4z"/>
+    <path d="M14 2l4 4L10 14l-4-4z"/>
+  </svg>
+</span>Commands: /e-chest, /anvil, /craft</p>
+
+<p><span>
+  <!-- 🛒 Auction & 📦 Kit -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF66FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6h15l-1.5 9h-13z"/>
+    <circle cx="9" cy="21" r="1"/>
+    <circle cx="18" cy="21" r="1"/>
+  </svg>
+</span>Auction: 4 items at a time & Weekly Kit</p>
+      </div>
+    </div>
+
+    <div class="rank-card vip" data-rs="130" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>VIP</h2><span>130 RS</span></div>
+      <div class="rank-details">
+       <!-- VIP rank card details -->
+<p><span>
+  <!-- 💎 Armor & Tools -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Max Enchanted Netherite Armor & Tools</p>
+
+<p><span>
+  <!-- 🍎🥕 Consumables -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8"/>
+    <line x1="12" y1="8" x2="12" y2="16"/>
+    <line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+</span>Golden Apples & Golden Carrots</p>
+
+<p><span>
+  <!-- 💠 Bonus -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/>
+  </svg>
+</span>Bonus: 16x Netherite Blocks, 20x Diamond Blocks</p>
+
+<p><span>
+  <!-- 🏠 Homes -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12l9-9 9 9"/>
+    <path d="M9 21V12h6v9"/>
+  </svg>
+</span>Homes: 6 | PVs: 6</p>
+
+<p><span>
+  <!-- ⚒️ Commands -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2l4 4-8 8-4-4z"/>
+    <path d="M14 2l4 4L10 14l-4-4z"/>
+  </svg>
+</span>Commands: /e-chest, /anvil, /craft</p>
+
+<p><span>
+  <!-- 🛒 Auction -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 6h15l-1.5 9h-13z"/>
+    <circle cx="9" cy="21" r="1"/>
+    <circle cx="18" cy="21" r="1"/>
+  </svg>
+</span>Auction: 6 items at a time</p>
+
+<p><span>
+  <!-- 📦 Weekly Kit -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E6E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 16V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8"/>
+    <path d="M3 16h18l-2 5H5l-2-5z"/>
+  </svg>
+</span>Weekly Kit: claim every 7 days</p>
+      </div>
+    </div>
+
+    <div class="rank-card immortal" data-rs="180" onclick="toggleDetails(this)">
+      <div class="rank-header"><h2>IMMORTAL</h2><span>180 RS</span></div>
+      <div class="rank-details">
+     <!-- Immortal rank card details -->
+<p><span>
+  <!-- 💎 Armor & Tools -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2l7 4v6c0 5-7 10-7 10S5 17 5 12V6l7-4z"/>
+  </svg>
+</span>Max Enchanted Netherite Armor (Protection V) & Tools</p>
+
+<p><span>
+  <!-- 🍎🥕 Consumables -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="8"/>
+    <line x1="12" y1="8" x2="12" y2="16"/>
+    <line x1="8" y1="12" x2="16" y2="12"/>
+  </svg>
+</span>Golden Apples & Golden Carrots</p>
+
+<p><span>
+  <!-- 🧪 XP Bottles -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 2v20h8V2H8z"/>
+    <path d="M8 8h8"/>
+    <path d="M8 16h8"/>
+  </svg>
+</span>3 Stacks XP Bottles</p>
+
+<p><span>
+  <!-- 💠 Bonus -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/>
+  </svg>
+</span>Bonus: 32x Netherite Blocks, 50x Diamond Blocks</p>
+
+<p><span>
+  <!-- 🏠 Homes -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12l9-9 9 9"/>
+    <path d="M9 21V12h6v9"/>
+  </svg>
+</span>Homes: 6 | PVs: 6</p>
+
+<p><span>
+  <!-- ⚒️ Commands -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2l4 4-8 8-4-4z"/>
+    <path d="M14 2l4 4L10 14l-4-4z"/>
+  </svg>
+</span>Commands: /e-chest, /anvil, /craft</p>
+
+<p><span>
+  <!-- 📦 Weekly Kit -->
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 16V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8"/>
+    <path d="M3 16h18l-2 5H5l-2-5z"/>
+  </svg>
+</span>Weekly Kit: claim every 7 days</p>
+      </div>
+    </div>
+
+   <div class="rank-card admin" data-rs="0" onclick="toggleDetails(this)">
+  <div class="rank-header"><h2>ADMIN</h2><span>High Priority</span></div>
+  <div class="rank-details">
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L2 7v6c0 5 3.5 9.74 10 12 6.5-2.26 10-7 10-12V7l-10-5z"/>
+        </svg>
+      </span>
+      Commands: /kick, /ban, /mute, /warn, /freeze
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 8c2.21 0 4-1.79 4-4S14.21 0 12 0 8 1.79 8 4s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v4h16v-4c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </span>
+      Server management: Access to server settings & configurations
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>
+      </span>
+      Staff coordination: Assign/moderate other staff members
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zm0-8h14V7H7v2z"/>
+        </svg>
+      </span>
+      Monitoring tools: View logs, player stats, activity
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8c4.41 0 8 3.59 8 8s-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+        </svg>
+      </span>
+      Moderation alerts: Receive real-time alerts for rule violations
+    </p>
+  </div>
+</div>
+
+       <div class="rank-card owner" data-rs="0" onclick="toggleDetails(this)">
+  <div class="rank-header"><h2>OWNER</h2><span>Highest Rank</span></div>
+  <div class="rank-details">
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L15 8l6 1-4 5 1 6-5-3-5 3 1-6-4-5 6-1 3-6z"/>
+        </svg>
+      </span>
+      All permissions: Full control of server
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8c4.42 0 8-3.59 8-8s-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6c3.31 0 6 2.69 6 6s-2.69 6-6 6z"/>
+        </svg>
+      </span>
+      Unlimited commands: /kick, /ban, /mute, /warn, /freeze
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L8 7H0l6 5-2 7 6-4 6 4-2-7 6-5h-8l-4-7z"/>
+        </svg>
+      </span>
+      Server management: Configure all settings & plugins
+    </p>
+    <p>
+      <span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 3h18v2H3V3zm0 4h18v2H3V7zm0 4h18v2H3v-2zm0 4h18v2H3v-2zm0 4h18v2H3v-2z"/>
+        </svg>
+      </span>
+      Monitoring: Full access to logs, stats & activity
+    </p>
+    <p>
+      <span>
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-1.99 2a1 1 0 0 0 .78 1.66h14.42a1 1 0 0 0 .78-1.66L18 16z"/>
+</svg>
+      </span>
+      Alerts & notifications: Receive critical server updates instantly
+    </p>
+  </div>
+</div>
+      </div>
+    </div>
+
+  </div>
+
+  <br><br><br><br><br><br><br><br><br>
+
+</div>
+
+<script>
+// Toggle rank details
+function toggleDetails(card){
+  const details = card.querySelector('.rank-details');
+  details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+// Search ranks by name
+function searchRanks(){
+  const input = document.getElementById('searchInput').value.toUpperCase();
+  const ranks = document.querySelectorAll('.rank-card');
+  ranks.forEach(rank => {
+    const name = rank.querySelector('h2').textContent.toUpperCase();
+    rank.style.display = name.includes(input) ? '' : 'none';
+  });
+}
+
+// Filter ranks by RS (price)
+const ranksContainer = document.getElementById('ranksContainer');
+const filterSelect = document.getElementById('filterSelect');
+
+// Define rank hierarchy
+const rankOrder = ["member","helper","staff","warrior","monster","vip","immortal","admin","owner"];
+
+function filterRanks() {
+  const sortValue = filterSelect.value;
+  const ranks = Array.from(ranksContainer.querySelectorAll('.rank-card'));
+
+  ranks.sort((a, b) => {
+    const rankA = rankOrder.indexOf(a.classList[1]); // second class is the rank
+    const rankB = rankOrder.indexOf(b.classList[1]);
+    
+    if(sortValue === 'low-high') return rankA - rankB; // lowest → highest
+    if(sortValue === 'high-low') return rankB - rankA; // highest → lowest
+    return 0;
+  });
+
+  // Remove existing cards and append sorted cards
+  ranksContainer.innerHTML = '';
+  ranks.forEach(rank => ranksContainer.appendChild(rank));
+}
+
+// Filter by tab
+function filterTab(rankType, tab){
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  const ranks = document.querySelectorAll('.rank-card');
+  ranks.forEach(rank => {
+    if(rankType==='all'){rank.style.display='';}
+    else{rank.style.display = rank.classList.contains(rankType) ? '' : 'none';}
+  });
+}
+</script>
+
+
+
+<div class="container">
+  <div class="title">Elemental SMP Leaderboard</div>
+
+
+
+ 
+
+ 
+    <!-- Add more ranks as before -->
+  </div>
+
+  <!-- Tab Priority Table -->
+  <div class="tablist-container">
+    <h2>Tab Priority (Dynamic)</h2>
+    <table class="tablist" id="tabPriorityTable">
+      <thead>
+        <tr><th>Rank</th><th>Players</th></tr>
+      </thead>
+      <tbody id="tabTableBody"></tbody>
+    </table>
+  </div>
+
+  <p style="margin-top:20px;font-size:0.9rem;color:#ccc;text-align:center;">
+    📖 For more support visit: <a href="https://elementalsmp.vercel.app">elementalsmp.vercel.app</a>
+  </p>
+</div>
+
+<script>
+// Toggle rank details
+function toggleDetails(card){
+  const details = card.querySelector('.rank-details');
+  details.style.display = details.style.display==='block' ? 'none' : 'block';
+}
+
+// Search ranks
+function searchRanks(){
+  const input = document.getElementById('searchInput').value.toUpperCase();
+  document.querySelectorAll('.rank-card').forEach(rank=>{
+    const name = rank.querySelector('h2').textContent.toUpperCase();
+    rank.style.display = name.includes(input) ? '' : 'none';
+  });
+}
+
+// Filter ranks by RS
+function filterRanks(){
+  const container = document.getElementById('ranksContainer');
+  const ranks = Array.from(container.querySelectorAll('.rank-card'));
+  const filter = document.getElementById('filterSelect').value;
+  let sorted = ranks.slice();
+  if(filter==='low-high'){sorted.sort((a,b)=>parseInt(a.dataset.rs)-parseInt(b.dataset.rs));}
+  else if(filter==='high-low'){sorted.sort((a,b)=>parseInt(b.dataset.rs)-parseInt(a.dataset.rs));}
+  container.innerHTML='';
+  sorted.forEach(rank => container.appendChild(rank));
+}
+
+// Filter by tab
+function filterTab(rankType, tabElement){
+  if(tabElement){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tabElement.classList.add('active');
+  }
+  document.querySelectorAll('.rank-card').forEach(rank=>{
+    rank.style.display = (rankType==='all' || rank.classList.contains(rankType)) ? '' : 'none';
+  });
+}
+
+// Dynamic Tab Priority Table
+const examplePlayers = [
+  {name:"Player1", rank:"owner"},
+  {name:"AdminJoe", rank:"admin"},
+  {name:"ImmortalMax", rank:"immortal"},
+  {name:"VIPAnna", rank:"vip"},
+  {name:"MonsterBob", rank:"monster"},
+  {name:"WarriorSue", rank:"warrior"},
+  {name:"StaffLiam", rank:"staff"},
+  {name:"HelperEva", rank:"helper"},
+  {name:"MemberTom", rank:"member"}
+];
+
+function populateTabTable(){
+  const tbody = document.getElementById('tabTableBody');
+  tbody.innerHTML='';
+  const ranksOrder = ['owner','admin','immortal','vip','monster','warrior','staff','helper','member'];
+  ranksOrder.forEach(rank=>{
+    const players = examplePlayers.filter(p=>p.rank===rank).map(p=>p.name).join(', ') || '-';
+    const tr = document.createElement('tr');
+    tr.className=rank;
+    tr.innerHTML = `<td>${rank.toUpperCase()}</td><td>${players}</td>`;
+    tr.onclick=()=>filterTab(rank);
+    tbody.appendChild(tr);
+  });
+}
+
+// Initial population
+populateTabTable();
+const urlParams = new URLSearchParams(window.location.search);
+const isEdit = urlParams.get('edit') === 'true';
+
+if (isEdit) {
+  // Make rank headers editable
+  document.querySelectorAll('.rank-header h2').forEach(el => {
+    el.contentEditable = true;
+    el.style.borderBottom = "1px dashed #fff"; // optional visual cue
+    el.title = "Click to edit";
+  });
+
+  // Make rank details editable
+  document.querySelectorAll('.rank-details p').forEach(el => {
+    el.contentEditable = true;
+    el.style.borderBottom = "1px dashed #fff";
+    el.title = "Click to edit";
+  });
+
+  // Optional: save changes to localStorage temporarily
+  document.querySelectorAll('.rank-card').forEach(card => {
+    card.addEventListener('input', () => {
+      localStorage.setItem('rankData', card.innerHTML);
+    });
+  });
+}
+
+</script>
+
+</body>
+</html>
