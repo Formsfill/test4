@@ -693,91 +693,47 @@ function populateTabTable(){
   });
 }
 
-// Initial population
-populateTabTable();
-const urlParams = new URLSearchParams(window.location.search);
-const isEdit = urlParams.get('edit') === 'true';
-
-if (isEdit) {
-  // Make rank headers editable
-  document.querySelectorAll('.rank-header h2').forEach(el => {
-    el.contentEditable = true;
-    el.style.borderBottom = "1px dashed #fff"; // optional visual cue
-    el.title = "Click to edit";
-  });
-
-  // Make rank details editable
-  document.querySelectorAll('.rank-details p').forEach(el => {
-    el.contentEditable = true;
-    el.style.borderBottom = "1px dashed #fff";
-    el.title = "Click to edit";
-  });
-
-  // Optional: save changes to localStorage temporarily
-  document.querySelectorAll('.rank-card').forEach(card => {
-    card.addEventListener('input', () => {
-      localStorage.setItem('rankData', card.innerHTML);
-    });
-  });
-}
-const urlParams = new URLSearchParams(window.location.search);
-const isEdit = urlParams.get('edit') === 'true';
-
-if (isEdit) {
-  document.querySelectorAll('.rank-card').forEach(card => {
-    // Check if player name span already exists
-    if (!card.querySelector('.player-name')) {
-      const nameEl = document.createElement('p');
-      nameEl.className = 'player-name';
-      nameEl.textContent = 'Player'; // default name
-      nameEl.contentEditable = true;
-      nameEl.style.borderBottom = "1px dashed #fff";
-      nameEl.style.marginTop = "10px";
-      nameEl.style.fontWeight = "500";
-      nameEl.title = "Click to edit player name";
-      
-      // Insert at the top of rank-details or after rank-header
-      const header = card.querySelector('.rank-header');
-      header.insertAdjacentElement('afterend', nameEl);
-    }
-  });
-  console.log("Player edit mode is ON");
-}
- // Example: Add/edit player names dynamically
+// Select all rank cards
 const ranks = document.querySelectorAll('.rank-card');
 
+// Default player names (can customize per rank)
+const defaultPlayerNames = {
+  member: 'Steve',
+  helper: 'Alex',
+  staff: 'Sam',
+  warrior: 'Warrior123',
+  monster: 'MonsterX',
+  vip: 'VIPPlayer',
+  immortal: 'ImmortalOne',
+  admin: 'AdminHero',
+  owner: 'OwnerLord'
+};
+
 ranks.forEach(rank => {
-  // Check if player name span already exists
-  let playerName = rank.querySelector('.player-name');
-  
-  if (!playerName) {
-    // Create the player name span dynamically
-    playerName = document.createElement('span');
-    playerName.classList.add('player-name');
-    playerName.style.marginLeft = '10px';
-    playerName.style.fontSize = '1rem';
-    playerName.style.color = '#FFD700';
-    playerName.contentEditable = true; // editable directly
-    playerName.title = "Click to edit player name";
-    
-    // Insert it into the rank header
-    const header = rank.querySelector('.rank-header');
-    header.appendChild(playerName);
-  }
+  const header = rank.querySelector('.rank-header h2');
+  const rankClass = Array.from(rank.classList).find(c => defaultPlayerNames[c]);
+  if (!header) return;
 
-  // Set default name if empty
-  if (!playerName.innerText) {
-    playerName.innerText = 'Player123';
-  }
+  // Create player name span
+  let playerName = document.createElement('span');
+  playerName.classList.add('player-name');
+  playerName.style.marginLeft = '10px';
+  playerName.style.fontSize = '1rem';
+  playerName.style.color = '#FFD700';
+  playerName.contentEditable = true; // makes it editable
+  playerName.title = "Click to edit player name";
 
-  // Save changes to localStorage on edit
+  // Set saved name from localStorage or default
+  const savedName = localStorage.getItem(rankClass);
+  playerName.innerText = savedName || defaultPlayerNames[rankClass] || 'Player123';
+
+  // Append to header
+  header.appendChild(playerName);
+
+  // Save edited name
   playerName.addEventListener('input', () => {
-    localStorage.setItem(rank.className, playerName.innerText);
+    localStorage.setItem(rankClass, playerName.innerText);
   });
-
-  // Restore saved names on page load
-  const savedName = localStorage.getItem(rank.className);
-  if (savedName) playerName.innerText = savedName;
 });
 </script>
 
