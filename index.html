@@ -743,6 +743,42 @@ if (isEdit) {
   });
   console.log("Player edit mode is ON");
 }
+ // Example: Add/edit player names dynamically
+const ranks = document.querySelectorAll('.rank-card');
+
+ranks.forEach(rank => {
+  // Check if player name span already exists
+  let playerName = rank.querySelector('.player-name');
+  
+  if (!playerName) {
+    // Create the player name span dynamically
+    playerName = document.createElement('span');
+    playerName.classList.add('player-name');
+    playerName.style.marginLeft = '10px';
+    playerName.style.fontSize = '1rem';
+    playerName.style.color = '#FFD700';
+    playerName.contentEditable = true; // editable directly
+    playerName.title = "Click to edit player name";
+    
+    // Insert it into the rank header
+    const header = rank.querySelector('.rank-header');
+    header.appendChild(playerName);
+  }
+
+  // Set default name if empty
+  if (!playerName.innerText) {
+    playerName.innerText = 'Player123';
+  }
+
+  // Save changes to localStorage on edit
+  playerName.addEventListener('input', () => {
+    localStorage.setItem(rank.className, playerName.innerText);
+  });
+
+  // Restore saved names on page load
+  const savedName = localStorage.getItem(rank.className);
+  if (savedName) playerName.innerText = savedName;
+});
 </script>
 
 </body>
